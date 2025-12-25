@@ -5,6 +5,7 @@ namespace Greelogix\MyFatoorah\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 use Greelogix\MyFatoorah\Facades\MyFatoorah;
 use Greelogix\MyFatoorah\Models\MyFatoorahPayment;
 
@@ -21,7 +22,7 @@ class WebhookController extends Controller
             Log::info('MyFatoorah Webhook Received', ['data' => $data]);
 
             // Validate webhook signature if secret is configured
-            if (config('myfatoorah.webhook_secret')) {
+            if (Config::get('myfatoorah.webhook_secret')) {
                 if (!$this->validateWebhookSignature($request)) {
                     Log::warning('MyFatoorah Webhook: Invalid signature', ['data' => $data]);
                     return response()->json(['error' => 'Invalid signature'], 401);
@@ -83,7 +84,7 @@ class WebhookController extends Controller
     protected function validateWebhookSignature(Request $request): bool
     {
         $signature = $request->header('X-MyFatoorah-Signature');
-        $secret = config('myfatoorah.webhook_secret');
+        $secret = Config::get('myfatoorah.webhook_secret');
 
         if (!$signature || !$secret) {
             return false;
@@ -132,7 +133,7 @@ class WebhookController extends Controller
             'customer_email' => $invoiceData['CustomerEmail'] ?? '',
             'customer_mobile' => $invoiceData['CustomerMobile'] ?? '',
             'amount' => $invoiceData['InvoiceValue'] ?? 0,
-            'currency' => $invoiceData['Currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'currency' => $invoiceData['Currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
             'invoice_value' => $invoiceData['InvoiceValue'] ?? null,
             'invoice_display_value' => $invoiceData['InvoiceDisplayValue'] ?? null,
             'transaction_status' => $transactionData['TransactionStatus'] ?? $invoiceData['InvoiceStatus'] ?? null,

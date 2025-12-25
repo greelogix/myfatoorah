@@ -4,6 +4,7 @@ namespace Greelogix\MyFatoorah\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 use Greelogix\MyFatoorah\Exceptions\MyFatoorahException;
 
 class MyFatoorahService
@@ -42,14 +43,21 @@ class MyFatoorahService
     {
         $payload = [
             'InvoiceAmount' => $data['amount'],
-            'CurrencyIso' => $data['currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'CurrencyIso' => $data['currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
             'CustomerName' => $data['customer_name'],
             'CustomerEmail' => $data['customer_email'],
-            'CustomerMobile' => $data['customer_mobile'] ?? '',
-            'Language' => $data['language'] ?? config('myfatoorah.language', 'en'),
+            'CustomerMobile' => $this->formatMobileNumber($data['customer_mobile'] ?? ''),
+            'Language' => $data['language'] ?? Config::get('myfatoorah.language', 'en'),
             'CallBackUrl' => $data['callback_url'] ?? '',
             'ErrorUrl' => $data['error_url'] ?? '',
         ];
+
+        // Add country ISO if provided
+        if (isset($data['country_iso'])) {
+            $payload['CountryCode'] = $data['country_iso'];
+        } elseif (Config::get('myfatoorah.country_iso')) {
+            $payload['CountryCode'] = Config::get('myfatoorah.country_iso');
+        }
 
         // Add invoice items if provided
         if (isset($data['invoice_items'])) {
@@ -68,8 +76,8 @@ class MyFatoorahService
                 'DayOfMonth' => $data['day_of_month'] ?? 1,
                 'DayOfWeek' => $data['day_of_week'] ?? 'Monday',
                 'MonthOfYear' => $data['month_of_year'] ?? 1,
-                'RecurringCycle' => $data['recurring_cycle'] ?? config('myfatoorah.recurring.default_cycle', 'Monthly'),
-                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? config('myfatoorah.recurring.default_cycle_count', 12),
+                'RecurringCycle' => $data['recurring_cycle'] ?? Config::get('myfatoorah.recurring.default_cycle', 'Monthly'),
+                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? Config::get('myfatoorah.recurring.default_cycle_count', 12),
             ];
         }
 
@@ -85,13 +93,20 @@ class MyFatoorahService
             'PaymentMethodId' => $paymentId,
             'CustomerName' => $data['customer_name'] ?? '',
             'CustomerEmail' => $data['customer_email'] ?? '',
-            'CustomerMobile' => $data['customer_mobile'] ?? '',
+            'CustomerMobile' => $this->formatMobileNumber($data['customer_mobile'] ?? ''),
             'InvoiceValue' => $data['amount'],
-            'DisplayCurrencyIso' => $data['currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'DisplayCurrencyIso' => $data['currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
             'CallBackUrl' => $data['callback_url'] ?? '',
             'ErrorUrl' => $data['error_url'] ?? '',
-            'Language' => $data['language'] ?? config('myfatoorah.language', 'en'),
+            'Language' => $data['language'] ?? Config::get('myfatoorah.language', 'en'),
         ];
+
+        // Add country ISO if provided
+        if (isset($data['country_iso'])) {
+            $payload['CountryCode'] = $data['country_iso'];
+        } elseif (Config::get('myfatoorah.country_iso')) {
+            $payload['CountryCode'] = Config::get('myfatoorah.country_iso');
+        }
 
         // Add invoice items if provided
         if (isset($data['invoice_items'])) {
@@ -110,8 +125,8 @@ class MyFatoorahService
                 'DayOfMonth' => $data['day_of_month'] ?? 1,
                 'DayOfWeek' => $data['day_of_week'] ?? 'Monday',
                 'MonthOfYear' => $data['month_of_year'] ?? 1,
-                'RecurringCycle' => $data['recurring_cycle'] ?? config('myfatoorah.recurring.default_cycle', 'Monthly'),
-                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? config('myfatoorah.recurring.default_cycle_count', 12),
+                'RecurringCycle' => $data['recurring_cycle'] ?? Config::get('myfatoorah.recurring.default_cycle', 'Monthly'),
+                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? Config::get('myfatoorah.recurring.default_cycle_count', 12),
             ];
         }
 
@@ -126,14 +141,21 @@ class MyFatoorahService
         $payload = [
             'PaymentMethodId' => $data['payment_method_id'],
             'InvoiceValue' => $data['amount'],
-            'CurrencyIso' => $data['currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'CurrencyIso' => $data['currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
             'CustomerName' => $data['customer_name'],
             'CustomerEmail' => $data['customer_email'],
-            'CustomerMobile' => $data['customer_mobile'] ?? '',
-            'Language' => $data['language'] ?? config('myfatoorah.language', 'en'),
+            'CustomerMobile' => $this->formatMobileNumber($data['customer_mobile'] ?? ''),
+            'Language' => $data['language'] ?? Config::get('myfatoorah.language', 'en'),
             'CallBackUrl' => $data['callback_url'] ?? '',
             'ErrorUrl' => $data['error_url'] ?? '',
         ];
+
+        // Add country ISO if provided
+        if (isset($data['country_iso'])) {
+            $payload['CountryCode'] = $data['country_iso'];
+        } elseif (Config::get('myfatoorah.country_iso')) {
+            $payload['CountryCode'] = Config::get('myfatoorah.country_iso');
+        }
 
         // Add invoice items if provided
         if (isset($data['invoice_items'])) {
@@ -156,8 +178,8 @@ class MyFatoorahService
                 'DayOfMonth' => $data['day_of_month'] ?? 1,
                 'DayOfWeek' => $data['day_of_week'] ?? 'Monday',
                 'MonthOfYear' => $data['month_of_year'] ?? 1,
-                'RecurringCycle' => $data['recurring_cycle'] ?? config('myfatoorah.recurring.default_cycle', 'Monthly'),
-                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? config('myfatoorah.recurring.default_cycle_count', 12),
+                'RecurringCycle' => $data['recurring_cycle'] ?? Config::get('myfatoorah.recurring.default_cycle', 'Monthly'),
+                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? Config::get('myfatoorah.recurring.default_cycle_count', 12),
             ];
         }
 
@@ -195,20 +217,27 @@ class MyFatoorahService
     {
         $payload = [
             'InvoiceValue' => $data['amount'],
-            'CurrencyIso' => $data['currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'CurrencyIso' => $data['currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
             'CustomerName' => $data['customer_name'],
             'CustomerEmail' => $data['customer_email'],
-            'CustomerMobile' => $data['customer_mobile'] ?? '',
-            'Language' => $data['language'] ?? config('myfatoorah.language', 'en'),
+            'CustomerMobile' => $this->formatMobileNumber($data['customer_mobile'] ?? ''),
+            'Language' => $data['language'] ?? Config::get('myfatoorah.language', 'en'),
             'RecurringModel' => [
                 'RecurringType' => $data['recurring_type'] ?? 'Monthly',
                 'DayOfMonth' => $data['day_of_month'] ?? 1,
                 'DayOfWeek' => $data['day_of_week'] ?? 'Monday',
                 'MonthOfYear' => $data['month_of_year'] ?? 1,
-                'RecurringCycle' => $data['recurring_cycle'] ?? config('myfatoorah.recurring.default_cycle', 'Monthly'),
-                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? config('myfatoorah.recurring.default_cycle_count', 12),
+                'RecurringCycle' => $data['recurring_cycle'] ?? Config::get('myfatoorah.recurring.default_cycle', 'Monthly'),
+                'RecurringCycleCount' => $data['recurring_cycle_count'] ?? Config::get('myfatoorah.recurring.default_cycle_count', 12),
             ],
         ];
+
+        // Add country ISO if provided
+        if (isset($data['country_iso'])) {
+            $payload['CountryCode'] = $data['country_iso'];
+        } elseif (Config::get('myfatoorah.country_iso')) {
+            $payload['CountryCode'] = Config::get('myfatoorah.country_iso');
+        }
 
         // Add invoice items if provided
         if (isset($data['invoice_items'])) {
@@ -226,7 +255,7 @@ class MyFatoorahService
         $payload = [
             'RecurringId' => $recurringId,
             'InvoiceValue' => $data['amount'],
-            'CurrencyIso' => $data['currency'] ?? config('myfatoorah.currency', 'KWD'),
+            'CurrencyIso' => $data['currency'] ?? Config::get('myfatoorah.currency', 'KWD'),
         ];
 
         return $this->makeRequest('POST', '/v2/ExecuteRecurringPayment', $payload);
@@ -284,6 +313,30 @@ class MyFatoorahService
 
             throw new MyFatoorahException('An error occurred: ' . $e->getMessage(), 0);
         }
+    }
+
+    /**
+     * Format mobile number for MyFatoorah API
+     * Removes spaces, dashes, and ensures proper format
+     */
+    protected function formatMobileNumber(?string $mobile): string
+    {
+        if (empty($mobile)) {
+            return '';
+        }
+
+        // Remove spaces, dashes, and parentheses
+        $mobile = preg_replace('/[\s\-\(\)]/', '', $mobile);
+
+        // If starts with +, keep it; otherwise ensure country code format
+        if (!str_starts_with($mobile, '+')) {
+            // If starts with 00, replace with +
+            if (str_starts_with($mobile, '00')) {
+                $mobile = '+' . substr($mobile, 2);
+            }
+        }
+
+        return $mobile;
     }
 }
 

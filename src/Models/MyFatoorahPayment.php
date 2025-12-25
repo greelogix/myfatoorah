@@ -59,14 +59,6 @@ class MyFatoorahPayment extends Model
     ];
 
     /**
-     * Get payment method relationship
-     */
-    public function paymentMethod()
-    {
-        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
-    }
-
-    /**
      * Check if payment is successful
      */
     public function isSuccessful(): bool

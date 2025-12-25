@@ -8,16 +8,8 @@ return [
     |
     | Your MyFatoorah API key. Get it from your MyFatoorah dashboard.
     |
-    | NOTE: This is a fallback value. The actual API key should be configured
-    | in the admin panel at /admin/myfatoorah/settings and stored in the
-    | myfatoorah_site_settings table. The SiteSetting value takes priority
-    | over this value and over the .env value.
-    |
     */
-    'api_key' => \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-        'myfatoorah_api_key',
-        env('MYFATOORAH_API_KEY', '')
-    ),
+    'api_key' => env('MYFATOORAH_API_KEY', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -26,13 +18,8 @@ return [
     |
     | MyFatoorah API base URL. Use test URL for testing, production for live.
     |
-    | NOTE: This is a fallback value. Configure in admin panel for production use.
-    |
     */
-    'base_url' => \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-        'myfatoorah_base_url',
-        env('MYFATOORAH_BASE_URL', 'https://apitest.myfatoorah.com')
-    ),
+    'base_url' => env('MYFATOORAH_BASE_URL', 'https://apitest.myfatoorah.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -41,16 +28,8 @@ return [
     |
     | Set to true for test mode, false for production.
     |
-    | NOTE: This is a fallback value. Configure in admin panel for production use.
-    |
     */
-    'test_mode' => filter_var(
-        \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-            'myfatoorah_test_mode',
-            env('MYFATOORAH_TEST_MODE', true)
-        ),
-        FILTER_VALIDATE_BOOLEAN
-    ),
+    'test_mode' => env('MYFATOORAH_TEST_MODE', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -60,10 +39,7 @@ return [
     | Secret key for validating webhook signatures.
     |
     */
-    'webhook_secret' => \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-        'myfatoorah_webhook_secret',
-        env('MYFATOORAH_WEBHOOK_SECRET', '')
-    ),
+    'webhook_secret' => env('MYFATOORAH_WEBHOOK_SECRET', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -87,10 +63,7 @@ return [
     | Default currency code (ISO 4217).
     |
     */
-    'currency' => \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-        'myfatoorah_currency',
-        env('MYFATOORAH_CURRENCY', 'KWD')
-    ),
+    'currency' => env('MYFATOORAH_CURRENCY', 'KWD'),
 
     /*
     |--------------------------------------------------------------------------
@@ -100,10 +73,17 @@ return [
     | Default language code (en, ar).
     |
     */
-    'language' => \Greelogix\MyFatoorah\Models\SiteSetting::getValue(
-        'myfatoorah_language',
-        env('MYFATOORAH_LANGUAGE', 'en')
-    ),
+    'language' => env('MYFATOORAH_LANGUAGE', 'en'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Country ISO
+    |--------------------------------------------------------------------------
+    |
+    | Default country ISO code (e.g., KWT, SAU, UAE).
+    |
+    */
+    'country_iso' => env('MYFATOORAH_COUNTRY_ISO', 'KWT'),
 
     /*
     |--------------------------------------------------------------------------
@@ -114,15 +94,5 @@ return [
     |
     */
     'payment_model' => \Greelogix\MyFatoorah\Models\MyFatoorahPayment::class,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Payment Method Model
-    |--------------------------------------------------------------------------
-    |
-    | The model class that will be used to store payment methods.
-    |
-    */
-    'payment_method_model' => \Greelogix\MyFatoorah\Models\PaymentMethod::class,
 ];
 

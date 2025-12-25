@@ -18,13 +18,9 @@ class MyFatoorahServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton('myfatoorah', function ($app) {
-            // Get API key from site settings, fallback to config/env
-            $apiKey = \Greelogix\MyFatoorah\Models\SiteSetting::getValue('myfatoorah_api_key', config('myfatoorah.api_key', ''));
-            $baseUrl = \Greelogix\MyFatoorah\Models\SiteSetting::getValue('myfatoorah_base_url', config('myfatoorah.base_url', 'https://apitest.myfatoorah.com'));
-            $testMode = \Greelogix\MyFatoorah\Models\SiteSetting::getValue('myfatoorah_test_mode', config('myfatoorah.test_mode', true));
-            
-            // Convert test mode to boolean
-            $testMode = filter_var($testMode, FILTER_VALIDATE_BOOLEAN);
+            $apiKey = config('myfatoorah.api_key', '');
+            $baseUrl = config('myfatoorah.base_url', 'https://apitest.myfatoorah.com');
+            $testMode = config('myfatoorah.test_mode', true);
             
             return new MyFatoorahService($apiKey, $baseUrl, $testMode);
         });
@@ -45,8 +41,6 @@ class MyFatoorahServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'myfatoorah-migrations');
-
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'myfatoorah');
     }
 }
 
